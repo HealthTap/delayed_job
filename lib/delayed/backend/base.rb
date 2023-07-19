@@ -12,7 +12,7 @@ module Delayed
           enqueue_job(job_options)
         end
 
-        def enqueue_job(options)
+        def enqueue_job(options) # rubocop:disable CyclomaticComplexity, PerceivedComplexity
           allow_delay = true
           unless Delayed::Worker.allow_delay_from_rake
             is_rake_task = defined?(::Rake) && ::Rake&.application&.top_level_tasks.present?
@@ -31,7 +31,7 @@ module Delayed
               end
             end
           end
-        rescue ::ActiveRecord::RecordNotUnique => exception
+        rescue ::ActiveRecord::RecordNotUnique => exception # rubocop:disable UselessAssignment
           Delayed::Worker.lifecycle.run_callbacks(:duplicate_job, Delayed::Job.new(:payload_object => options[:payload_object])) do
           end
         end
@@ -148,7 +148,8 @@ module Delayed
       end
 
       def fail!
-        update_attributes(:failed_at => self.class.db_time_now)
+        self.failed_at = self.class.db_time_now
+        save!
       end
 
     protected

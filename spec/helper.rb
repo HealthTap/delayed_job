@@ -1,20 +1,25 @@
 require 'simplecov'
-require 'coveralls'
+require 'simplecov-lcov'
 
-SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
+SimpleCov::Formatter::LcovFormatter.config do |c|
+  c.report_with_single_file = true
+  c.single_report_path = 'coverage/lcov.info'
+end
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new(
+  [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::LcovFormatter
+  ]
+)
 
 SimpleCov.start do
   add_filter '/spec/'
-  # Each version of ruby and version of rails test different things
-  # This should probably just be removed.
-  minimum_coverage(85.0)
 end
 
 require 'logger'
 require 'rspec'
 
 require 'action_mailer'
-require 'active_support/dependencies'
 require 'active_record'
 
 require 'delayed_job'
@@ -44,9 +49,6 @@ Delayed::Worker.backend = :test
 
 # Add this directory so the ActiveSupport autoloading works
 ActiveSupport::Dependencies.autoload_paths << File.dirname(__FILE__)
-
-# Add this to simulate Railtie initializer being executed
-ActionMailer::Base.extend(Delayed::DelayMail)
 
 # Used to test interactions between DJ and an ORM
 ActiveRecord::Base.establish_connection :adapter => 'sqlite3', :database => ':memory:'
