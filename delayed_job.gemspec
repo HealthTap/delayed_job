@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata       = {
     'changelog_uri'   => 'https://github.com/collectiveidea/delayed_job/blob/master/CHANGELOG.md',
     'bug_tracker_uri' => 'https://github.com/collectiveidea/delayed_job/issues',
-    'source_code_uri' => 'https://github.com/collectiveidea/delayed_job'
+    'source_code_uri' => 'https://github.com/collectiveidea/delayed_job',
+    'github_repo' => 'ssh://github.com/HealthTap/delayed_job'
   }
 end
